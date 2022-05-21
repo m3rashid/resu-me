@@ -6,49 +6,84 @@ import {
   Button,
   FormHelperText,
   FormErrorMessage,
+  Box,
+  Flex,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 import CreateWrapper from "../../components/createWrapper";
-import dataContext from "../../components/dataContext";
-import { useNavigate } from "react-router-dom";
+import dataContext, { ISkill } from "../../components/dataContext";
+import useArray from "../../hooks/useArray";
+
+interface ISingleSkill {
+  skill: ISkill;
+  handleRemoveSkill: (index: number) => void;
+}
+const SingleSkill: React.FC<ISingleSkill> = ({ skill, handleRemoveSkill }) => {
+  return (
+    <Flex
+      key={skill.index}
+      justifyContent="space-between"
+      alignItems="center"
+      border="1px"
+      borderColor={"orange.400"}
+      padding="10px"
+      rounded="md"
+    >
+      <Box fontSize={22}>{skill.name}</Box>
+      <Button onClick={() => handleRemoveSkill(skill.index)}>Remove</Button>
+    </Flex>
+  );
+};
 
 interface IProps {}
 
 const Skills: React.FC<IProps> = () => {
   const navigate = useNavigate();
+  const [oneSkill, setOneSkill] = React.useState("");
   const { data: globalData, setData: setGlobalData } =
     React.useContext(dataContext);
-  const [oneSkill, setOneSkill] = React.useState("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setOneSkill(e.target.value);
-  };
+  const {
+    array: skillsArr,
+    push,
+    remove,
+  } = useArray<ISkill>(globalData.skills);
 
   const handleAddSkill = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    push({ index: Math.random(), name: oneSkill });
+    setOneSkill("");
+  };
+
+  const handleRemoveSkill = (index: number) => {
+    const i = skillsArr.findIndex((item) => item.index === index);
+    remove(i);
+  };
+
+  const handleSubmitAndPageChange = () => {
     setGlobalData((prev) => ({
       ...prev,
-      skills: [...prev.skills, { index: Math.random(), name: oneSkill }],
+      skills: [...prev.skills, ...skillsArr],
     }));
-    setOneSkill("");
+    navigate("/create/interests");
   };
 
   const errors = {
     skill: oneSkill.length < 3,
   };
 
-  const handleSubmitAndPageChange = () => {
-    navigate("/create/interests");
-  };
-
-  const removeSkill = (index: number) => {};
-
   return (
     <CreateWrapper>
-      {globalData.skills.map((s) => (
-        <div key={s.index}>{s.name}</div>
-      ))}
+      {skillsArr.length > 0 &&
+        skillsArr.map((s) => (
+          <SingleSkill
+            key={s.index}
+            skill={s}
+            handleRemoveSkill={handleRemoveSkill}
+          />
+        ))}
       <FormControl isRequired isInvalid>
         <FormLabel htmlFor="skill">Enter a Skill</FormLabel>
         <FormHelperText>Enter your skill</FormHelperText>
@@ -57,7 +92,7 @@ const Skills: React.FC<IProps> = () => {
           type="text"
           name="skill"
           value={oneSkill}
-          onChange={handleChange}
+          onChange={(e) => setOneSkill(e.target.value)}
         />
         {errors.skill && <FormErrorMessage>Skill too short</FormErrorMessage>}
       </FormControl>
@@ -65,7 +100,13 @@ const Skills: React.FC<IProps> = () => {
         Add Skill
       </Button>
       <Button
-        disabled={globalData.skills.length === 0}
+        disabled={
+          skillsArr.length > 0
+            ? false
+            : globalData.skills.length > 0
+            ? false
+            : true
+        }
         type="submit"
         onClick={handleSubmitAndPageChange}
       >

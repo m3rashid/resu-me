@@ -1,7 +1,7 @@
-import * as React from "react";
+import React from "react";
 import { cloneDeep } from "lodash";
 
-function useArray<T>(initialValue?: T[]): any {
+function useArray<T>(initialValue?: T[]) {
   const [array, setArray] = React.useState<T[]>(initialValue || []);
 
   const push = (item: T) => setArray((prev) => [...prev, item]);

@@ -53,34 +53,40 @@ const NextPrevious: React.FC<IProps> = () => {
   };
 
   return (
-    <Flex direction="row" alignItems="center" justifyContent="space-between">
-      <Flex
-        flexDirection="column"
-        alignItems="flex-start"
-        justifyContent="center"
-        onClick={goBack}
-        paddingRight={10}
-        {...boxStyle}
-      >
-        <Heading as="h3" size="md">
-          Previous
-        </Heading>
-        {prevRef.current && <Text>Choose {prevRef.current}</Text>}
+    <>
+      <Flex direction="row" alignItems="center" justifyContent="space-between">
+        <Flex
+          flexDirection="column"
+          alignItems="flex-start"
+          justifyContent="center"
+          onClick={goBack}
+          paddingRight={10}
+          {...boxStyle}
+        >
+          <Heading as="h3" size="md">
+            Previous
+          </Heading>
+          {prevRef.current && <Text>Choose {prevRef.current}</Text>}
+        </Flex>
+        <Flex
+          flexDirection="column"
+          alignItems="flex-end"
+          justifyContent="center"
+          onClick={goAhead}
+          paddingLeft={10}
+          {...boxStyle}
+        >
+          <Heading as="h3" size="md">
+            Next
+          </Heading>
+          {nextRef.current && <Text>Choose {nextRef.current}</Text>}
+        </Flex>
       </Flex>
-      <Flex
-        flexDirection="column"
-        alignItems="flex-end"
-        justifyContent="center"
-        onClick={goAhead}
-        paddingLeft={10}
-        {...boxStyle}
-      >
-        <Heading as="h3" size="md">
-          Next
-        </Heading>
-        {nextRef.current && <Text>Choose {nextRef.current}</Text>}
-      </Flex>
-    </Flex>
+      <Text color={"orange.400"} marginTop="-10px" align="center">
+        Navigation keys (Next/Previous) are just for help, data wont saved if
+        you dont click proceed ahead
+      </Text>
+    </>
   );
 };
 
