@@ -1,0 +1,38 @@
+import { Link } from "react-router-dom";
+import { Box, Heading, Text, Button, Flex } from "@chakra-ui/react";
+
+export default function NotFound() {
+  return (
+    <Flex justify="center" align="center" height="80vh">
+      <Box textAlign="center" py={10} px={6}>
+        <Heading
+          display="inline-block"
+          as="h2"
+          size="2xl"
+          bg="orange.400"
+          backgroundClip="text"
+        >
+          404
+        </Heading>
+        <Text fontSize="18px" mt={3} mb={2}>
+          Page Not Found
+        </Text>
+        <Text color={"gray.500"} mb={6}>
+          The page you're looking for does not seem to exist
+        </Text>
+
+        <Button
+          rounded={"full"}
+          px={6}
+          colorScheme={"orange"}
+          bg={"orange.400"}
+          _hover={{ bg: "orange.500" }}
+          as={Link}
+          to={"/"}
+        >
+          Back to Home
+        </Button>
+      </Box>
+    </Flex>
+  );
+}
