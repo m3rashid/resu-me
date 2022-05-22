@@ -10,7 +10,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import CreateWrapper from "../../components/createWrapper";
-import dataContext, { IInterests } from "../../components/dataContext";
+import dataContext, { ISkill } from "../../components/dataContext";
+import { SingleSkill } from "./skills";
 
 interface IProps {}
 
@@ -40,8 +41,6 @@ const Interests: React.FC<IProps> = () => {
     setOneInterest(e.target.value);
   };
 
-  const removeInterest = (index: number) => {};
-
   const handleSubmitAndPageChange = () => {
     navigate("/create/contact");
   };
@@ -53,7 +52,7 @@ const Interests: React.FC<IProps> = () => {
   return (
     <CreateWrapper>
       {globalData.interests.map((s) => (
-        <div key={s.index}>{s.name}</div>
+        <SingleSkill key={s.index} skill={s as ISkill} />
       ))}
       <FormControl isRequired isInvalid>
         <FormLabel htmlFor="oneInterest">Enter a Interest</FormLabel>

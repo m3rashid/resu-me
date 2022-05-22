@@ -52,28 +52,37 @@ export interface IResumeData {
   theme: {};
 }
 
-export const initialState: IResumeData = {
-  template: {},
-  about: {
-    name: "",
-    jobTitle: "",
-    bio: "",
-  },
-  education: [],
-  experience: [],
-  skills: [],
-  interests: [],
-  contact: {
-    address: "",
-    bitBucket: "",
-    email: "",
-    github: "",
-    linkedIn: "",
-    phone: "",
-    portfolio: "",
-  },
-  theme: {},
-};
+const prevState = window.localStorage.getItem("resume-data");
+
+let initialState: IResumeData;
+
+if (prevState) {
+  initialState = JSON.parse(prevState);
+} else {
+  initialState = {
+    template: {},
+    about: {
+      name: "",
+      jobTitle: "",
+      bio: "",
+    },
+    education: [],
+    experience: [],
+    skills: [],
+    interests: [],
+    contact: {
+      address: "",
+      bitBucket: "",
+      email: "",
+      github: "",
+      linkedIn: "",
+      phone: "",
+      portfolio: "",
+    },
+    theme: {},
+  };
+}
+export { initialState };
 
 const dataContext = React.createContext<{
   data: IResumeData;

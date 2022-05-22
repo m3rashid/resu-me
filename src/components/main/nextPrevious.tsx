@@ -53,7 +53,7 @@ const NextPrevious: React.FC<IProps> = () => {
   };
 
   return (
-    <>
+    <div className="nextPrev">
       <Flex direction="row" alignItems="center" justifyContent="space-between">
         <Flex
           flexDirection="column"
@@ -86,7 +86,7 @@ const NextPrevious: React.FC<IProps> = () => {
         Navigation keys (Next/Previous) are just for help, data wont saved if
         you dont click proceed ahead
       </Text>
-    </>
+    </div>
   );
 };
 

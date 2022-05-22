@@ -19,3 +19,19 @@ body::-webkit-scrollbar-thumb {
   margin-top: 64px;
   min-height: calc(100vh - 181px);
 }
+
+.print-containter {
+  display: none;
+}
+
+@media print {
+  .header,
+  .nextPrev,
+  .footer,
+  .themePage {
+    display: none;
+  }
+  .print-containter {
+    display: block;
+  }
+}

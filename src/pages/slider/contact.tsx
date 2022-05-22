@@ -18,15 +18,7 @@ const Contact: React.FC<IProps> = () => {
   const { data: globalData, setData: setGlobalData } =
     React.useContext(dataContext);
 
-  const [contacts, setContacts] = React.useState<IContact>({
-    email: "",
-    portfolio: "",
-    phone: "",
-    github: "",
-    linkedIn: "",
-    bitBucket: "",
-    address: "",
-  });
+  const [contacts, setContacts] = React.useState<IContact>(globalData.contact);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,27 +30,18 @@ const Contact: React.FC<IProps> = () => {
       ...prev,
       contact: contacts,
     }));
-    setContacts({
-      email: "",
-      portfolio: "",
-      phone: "",
-      github: "",
-      linkedIn: "",
-      bitBucket: "",
-      address: "",
-    });
     navigate("/create/theme");
   };
 
   return (
     <CreateWrapper>
       <FormControl>
-        <FormLabel htmlFor="name">Email</FormLabel>
+        <FormLabel htmlFor="email">Email</FormLabel>
         <FormHelperText>Enter your Email</FormHelperText>
         <Input
-          id="name"
+          id="email"
           type="text"
-          name="name"
+          name="email"
           value={contacts.email}
           onChange={handleChange}
         />

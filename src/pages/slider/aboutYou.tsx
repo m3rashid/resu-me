@@ -7,9 +7,10 @@ import {
   Input,
   Button,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+
 import CreateWrapper from "../../components/createWrapper";
 import dataContext from "../../components/dataContext";
-import { useNavigate } from "react-router-dom";
 
 interface IProps {}
 
@@ -17,11 +18,7 @@ const AboutYou: React.FC<IProps> = () => {
   const navigate = useNavigate();
   const { data: globalData, setData: setGlobalData } =
     React.useContext(dataContext);
-  const [data, setData] = React.useState({
-    name: "",
-    jobTitle: "",
-    bio: "",
-  });
+  const [data, setData] = React.useState(globalData.about);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -31,11 +28,7 @@ const AboutYou: React.FC<IProps> = () => {
   const handleSubmit = () => {
     setGlobalData((prev) => ({
       ...prev,
-      about: {
-        name: data.name,
-        jobTitle: data.jobTitle,
-        bio: data.bio,
-      },
+      about: { name: data.name, jobTitle: data.jobTitle, bio: data.bio },
     }));
     navigate("/create/education");
   };
@@ -48,7 +41,7 @@ const AboutYou: React.FC<IProps> = () => {
 
   return (
     <CreateWrapper>
-      <FormControl isRequired isInvalid>
+      <FormControl isRequired isInvalid={data.name !== ""}>
         <FormLabel htmlFor="name">Name</FormLabel>
         <FormHelperText>Enter your Name</FormHelperText>
         <Input
@@ -60,7 +53,7 @@ const AboutYou: React.FC<IProps> = () => {
         />
         {errors.name && <FormErrorMessage>Name is too short</FormErrorMessage>}
       </FormControl>
-      <FormControl isRequired isInvalid>
+      <FormControl isRequired isInvalid={data.jobTitle !== ""}>
         <FormLabel htmlFor="jobTitle">Job Title</FormLabel>
         <FormHelperText>Enter your Job Title</FormHelperText>
         <Input
@@ -74,7 +67,7 @@ const AboutYou: React.FC<IProps> = () => {
           <FormErrorMessage>jobTitle is too short</FormErrorMessage>
         )}
       </FormControl>
-      <FormControl isRequired isInvalid>
+      <FormControl isRequired isInvalid={data.bio !== ""}>
         <FormLabel htmlFor="bio">Bio</FormLabel>
         <FormHelperText>Enter your Bio</FormHelperText>
         <Input

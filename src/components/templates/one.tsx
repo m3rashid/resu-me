@@ -1,27 +1,14 @@
 import React from "react";
+import dataContext from "../dataContext";
 
 interface IProps {}
 
 const TemplateOne: React.FC<IProps> = () => {
+  const { data, setData } = React.useContext(dataContext);
   return (
     <>
-      <div>Template one</div>
+      <div className="print-containter">{JSON.stringify(data, null, 4)}</div>
     </>
-    // <Document
-    //   author="MD Rashid Hussain @ Resu-Me"
-    //   creator="Resu-Me"
-    //   title="resume.pdf"
-    //   language="english"
-    // >
-    //   <Page size="A4" style={styles.page}>
-    //     <View style={styles.section}>
-    //       <Text>Section #1</Text>
-    //     </View>
-    //     <View style={styles.section}>
-    //       <Text>Section #2</Text>
-    //     </View>
-    //   </Page>
-    // </Document>
   );
 };
 

@@ -1,3 +1,4 @@
+import { Button } from "@chakra-ui/react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -12,11 +13,23 @@ const ResumeTheme: React.FC<IProps> = () => {
   const { data: globalData, setData: setGlobalData } =
     React.useContext(dataContext);
 
+  React.useEffect(() => {
+    window.localStorage.setItem("resume-data", JSON.stringify(globalData));
+  });
+
+  const generatePDF = () => {
+    window.print();
+  };
+
   return (
-    <CreateWrapper>
-      <pre>{JSON.stringify(globalData, null, 4)}</pre>
+    <>
+      <CreateWrapper>
+        <div className="themePage">
+          <Button onClick={generatePDF}>Generate PDF</Button>
+        </div>
+      </CreateWrapper>
       <TemplateOne />
-    </CreateWrapper>
+    </>
   );
 };
 

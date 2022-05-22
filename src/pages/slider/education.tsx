@@ -1,11 +1,15 @@
 import React from "react";
 import {
+  Box,
   Button,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
+  Heading,
   Input,
+  Text,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +18,36 @@ import dataContext, {
   IEducation,
   IResumeData,
 } from "../../components/dataContext";
+
+interface ISingleEdu {
+  education: IEducation;
+}
+const SingleEducation: React.FC<ISingleEdu> = ({ education }) => {
+  return (
+    <Flex
+      key={education.index}
+      border="1px"
+      borderColor={"orange.400"}
+      padding="10px"
+      direction="column"
+      rounded="md"
+    >
+      <Heading as="h3" size="md">
+        {education.name}
+      </Heading>
+      <Flex justifyContent="space-between">
+        <Box>
+          <Text>Started in {education.startYear}</Text>
+          <Text>Completed in {education.endYear}</Text>
+        </Box>
+        <Box>
+          {education.grade && <Text>Secured {education.grade} grade</Text>}
+          {education.percentage && <Text>Secured {education.percentage}%</Text>}
+        </Box>
+      </Flex>
+    </Flex>
+  );
+};
 
 interface IInputProps {
   setGlobalData: React.Dispatch<React.SetStateAction<IResumeData>>;
@@ -64,11 +98,15 @@ const NewInput: React.FC<IInputProps> = ({ setGlobalData }) => {
       parseInt(data.endYear) < parseInt(data.startYear) ||
       parseInt(data.endYear) < 1900 ||
       parseInt(data.endYear) > 2100,
+    percentage:
+      isNaN(parseInt(data.percentage)) ||
+      parseInt(data.percentage) < 0 ||
+      parseInt(data.percentage) > 100,
   };
 
   return (
     <>
-      <FormControl isRequired isInvalid>
+      <FormControl isRequired isInvalid={data.name !== ""}>
         <FormLabel htmlFor="name">Name of Institution</FormLabel>
         <FormHelperText>Enter Name of Institution</FormHelperText>
         <Input
@@ -80,7 +118,7 @@ const NewInput: React.FC<IInputProps> = ({ setGlobalData }) => {
         />
         {errors.name && <FormErrorMessage>Name is too short</FormErrorMessage>}
       </FormControl>
-      <FormControl isRequired isInvalid>
+      <FormControl isRequired isInvalid={data.startYear !== ""}>
         <FormLabel htmlFor="startYear">Start Year</FormLabel>
         <FormHelperText>Enter Start Year of the Institution</FormHelperText>
         <Input
@@ -94,7 +132,7 @@ const NewInput: React.FC<IInputProps> = ({ setGlobalData }) => {
           <FormErrorMessage>Invalid Start Year</FormErrorMessage>
         )}
       </FormControl>
-      <FormControl isRequired isInvalid>
+      <FormControl isRequired isInvalid={data.endYear !== ""}>
         <FormLabel htmlFor="endYear">End Year</FormLabel>
         <FormHelperText>
           Enter end/exprected end Year of the Institution
@@ -121,7 +159,7 @@ const NewInput: React.FC<IInputProps> = ({ setGlobalData }) => {
           onChange={handleChange}
         />
       </FormControl>
-      <FormControl>
+      <FormControl isInvalid={data.percentage !== ""}>
         <FormLabel htmlFor="percentage">Percentage</FormLabel>
         <FormHelperText>Enter Final Percentage</FormHelperText>
         <Input
@@ -131,6 +169,9 @@ const NewInput: React.FC<IInputProps> = ({ setGlobalData }) => {
           value={data.percentage}
           onChange={handleChange}
         />
+        {errors.percentage && (
+          <FormErrorMessage>Invalid Percentage</FormErrorMessage>
+        )}
       </FormControl>
       <Button
         disabled={errors.name || errors.startYear || errors.endYear}
@@ -166,13 +207,14 @@ const Education: React.FC<IProps> = () => {
     <CreateWrapper>
       {globalData.education.map((edu) => {
         return (
-          <div key={edu.index} onClick={() => removeEducation(edu.index)}>
-            <p>Name: {edu.name}</p>
-            <p>Start Year: {edu.startYear}</p>
-            <p>End Year: {edu.endYear}</p>
-            <p>Grade: {edu.grade}</p>
-            <p>Percentage: {edu.percentage}</p>
-          </div>
+          // <div key={edu.index} onClick={() => removeEducation(edu.index)}>
+          //   <p>Name: {edu.name}</p>
+          //   <p>Start Year: {edu.startYear}</p>
+          //   <p>End Year: {edu.endYear}</p>
+          //   <p>Grade: {edu.grade}</p>
+          //   <p>Percentage: {edu.percentage}</p>
+          // </div>
+          <SingleEducation key={edu.index} education={edu} />
         );
       })}
       <NewInput setGlobalData={setGlobalData} />

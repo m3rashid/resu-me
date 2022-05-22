@@ -1,16 +1,46 @@
 import React from "react";
 import {
   Button,
+  Flex,
   FormControl,
   FormErrorMessage,
   FormHelperText,
   FormLabel,
+  Heading,
   Input,
+  Text,
 } from "@chakra-ui/react";
 
 import CreateWrapper from "../../components/createWrapper";
-import dataContext, { IResumeData } from "../../components/dataContext";
+import dataContext, {
+  IExperience,
+  IResumeData,
+} from "../../components/dataContext";
 import { useNavigate } from "react-router-dom";
+
+interface ISingleExp {
+  experience: IExperience;
+}
+
+const SingleExperience: React.FC<ISingleExp> = ({ experience }) => {
+  return (
+    <Flex
+      key={experience.index}
+      border="1px"
+      borderColor={"orange.400"}
+      padding="10px"
+      direction="column"
+      rounded="md"
+    >
+      <Heading as="h3" size="md">
+        {experience.name}
+      </Heading>
+      <Text>Started in {experience.startYear}</Text>
+      <Text>Completed in {experience.endYear}</Text>
+      {experience.role && <Text>As a {experience.role}</Text>}
+    </Flex>
+  );
+};
 
 interface IInputProps {
   setGlobalData: React.Dispatch<React.SetStateAction<IResumeData>>;
@@ -32,20 +62,9 @@ const NewInput: React.FC<IInputProps> = ({ setGlobalData }) => {
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setGlobalData((prev) => ({
       ...prev,
-      experience: [
-        ...prev.experience,
-        {
-          ...data,
-          index: Math.random() * 10,
-        },
-      ],
+      experience: [...prev.experience, { ...data, index: Math.random() * 10 }],
     }));
-    setData({
-      name: "",
-      startYear: "",
-      endYear: "",
-      role: "",
-    });
+    setData({ name: "", startYear: "", endYear: "", role: "" });
   };
 
   const errors = {
@@ -64,7 +83,7 @@ const NewInput: React.FC<IInputProps> = ({ setGlobalData }) => {
 
   return (
     <>
-      <FormControl isRequired isInvalid>
+      <FormControl isRequired isInvalid={data.name !== ""}>
         <FormLabel htmlFor="name">Name of Institution</FormLabel>
         <FormHelperText>Enter Name of the Company</FormHelperText>
         <Input
@@ -76,7 +95,7 @@ const NewInput: React.FC<IInputProps> = ({ setGlobalData }) => {
         />
         {errors.name && <FormErrorMessage>Name is too short</FormErrorMessage>}
       </FormControl>
-      <FormControl isRequired isInvalid>
+      <FormControl isRequired isInvalid={data.startYear !== ""}>
         <FormLabel htmlFor="startYear">Joined</FormLabel>
         <FormHelperText>Enter Joining month/year the Company</FormHelperText>
         <Input
@@ -90,7 +109,7 @@ const NewInput: React.FC<IInputProps> = ({ setGlobalData }) => {
           <FormErrorMessage>Invalid Start Year</FormErrorMessage>
         )}
       </FormControl>
-      <FormControl isRequired isInvalid>
+      <FormControl isRequired isInvalid={data.endYear !== ""}>
         <FormLabel htmlFor="endYear">Left</FormLabel>
         <FormHelperText>Enter leaving month/year the Company</FormHelperText>
         <Input
@@ -104,7 +123,7 @@ const NewInput: React.FC<IInputProps> = ({ setGlobalData }) => {
           <FormErrorMessage>Invalid End Year</FormErrorMessage>
         )}
       </FormControl>
-      <FormControl isRequired isInvalid>
+      <FormControl isRequired isInvalid={data.role !== ""}>
         <FormLabel htmlFor="role">Role</FormLabel>
         <FormHelperText>Enter your role in the Company</FormHelperText>
         <Input
@@ -143,14 +162,7 @@ const Experience: React.FC<IProps> = () => {
   return (
     <CreateWrapper>
       {globalData.experience.map((exp) => {
-        return (
-          <div key={exp.index}>
-            <p>Name: {exp.name}</p>
-            <p>Start Year: {exp.startYear}</p>
-            <p>End Year: {exp.endYear}</p>
-            <p>Role: {exp.role}</p>
-          </div>
-        );
+        return <SingleExperience key={exp.index} experience={exp} />;
       })}
       <NewInput setGlobalData={setGlobalData} />
       <Button

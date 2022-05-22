@@ -87,6 +87,7 @@ const Header = ({ isHome = false }: { isHome?: boolean }) => {
   return (
     <>
       <Box
+        className="header"
         bg={useColorModeValue("gray.100", "gray.900")}
         px={4}
         position="fixed"
